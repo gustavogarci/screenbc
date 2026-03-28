@@ -1,0 +1,17 @@
+{
+  "V8N": [
+    { "name": "James Bay UPCC", "address": "230 Menzies St, Victoria", "phone": "250-953-4646" },
+    { "name": "Westshore UPCC", "address": "2780 Veterans Memorial Pkwy, Langford", "phone": "250-519-5450" },
+    { "name": "Royal Jubilee Walk-In", "address": "1952 Bay St, Victoria", "phone": "250-370-8000" }
+  ],
+  "V9A": [
+    { "name": "James Bay UPCC", "address": "230 Menzies St, Victoria", "phone": "250-953-4646" },
+    { "name": "Westshore UPCC", "address": "2780 Veterans Memorial Pkwy, Langford", "phone": "250-519-5450" },
+    { "name": "Esquimalt Walk-In Clinic", "address": "1153 Esquimalt Rd, Esquimalt", "phone": "250-381-7134" }
+  ],
+  "V2S": [
+    { "name": "Abbotsford UPCC", "address": "34194 Marshall Rd, Abbotsford", "phone": "604-851-4890" },
+    { "name": "MSA Walk-In Clinic", "address": "2040 McCallum Rd, Abbotsford", "phone": "604-853-4514" },
+    { "name": "Clearbrook Medical Clinic", "address": "32660 George Ferguson Way, Abbotsford", "phone": "604-853-3131" }
+  ]
+}

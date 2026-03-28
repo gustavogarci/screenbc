@@ -1,0 +1,17 @@
+{
+  "V8N": [
+    { "name": "LifeLabs — Victoria Hillside", "address": "1640 Hillside Ave, Victoria", "phone": "250-370-8510" },
+    { "name": "LifeLabs — Victoria Shelbourne", "address": "3553 Shelbourne St, Victoria", "phone": "250-370-8509" },
+    { "name": "LifeLabs — Oak Bay", "address": "2200 Oak Bay Ave, Victoria", "phone": "250-370-8508" }
+  ],
+  "V9A": [
+    { "name": "LifeLabs — Victoria Hillside", "address": "1640 Hillside Ave, Victoria", "phone": "250-370-8510" },
+    { "name": "LifeLabs — Esquimalt", "address": "1153 Esquimalt Rd, Esquimalt", "phone": "250-370-8507" },
+    { "name": "LifeLabs — Victoria Shelbourne", "address": "3553 Shelbourne St, Victoria", "phone": "250-370-8509" }
+  ],
+  "V2S": [
+    { "name": "LifeLabs — Abbotsford", "address": "2775 Gladwin Rd, Abbotsford", "phone": "604-855-7242" },
+    { "name": "LifeLabs — Clearbrook", "address": "32700 George Ferguson Way, Abbotsford", "phone": "604-853-7890" },
+    { "name": "LifeLabs — Mission", "address": "7337 Hurd St, Mission", "phone": "604-826-1243" }
+  ]
+}
