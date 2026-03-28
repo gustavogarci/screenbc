@@ -10,7 +10,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
   }
 
-  const patient = getPatient(patientId);
+  const patient = await getPatient(patientId);
   if (!patient) {
     return NextResponse.json({ error: "Patient not found" }, { status: 404 });
   }
@@ -44,7 +44,7 @@ export async function POST(request: NextRequest) {
     });
   }
 
-  updatePatient(patientId, {
+  await updatePatient(patientId, {
     questionnaire,
     questionnaireCompleted: true,
     framinghamRisk,

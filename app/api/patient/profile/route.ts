@@ -8,7 +8,7 @@ export async function GET() {
     return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
   }
 
-  const patient = getPatient(patientId);
+  const patient = await getPatient(patientId);
   if (!patient) {
     return NextResponse.json({ error: "Patient not found" }, { status: 404 });
   }
@@ -21,9 +21,21 @@ export async function POST(request: NextRequest) {
   const { action, patientId } = body;
 
   if (action === "accept-consent") {
-    const patient = updatePatient(patientId, { consentAccepted: true });
+    const patient = await updatePatient(patientId, { consentAccepted: true });
     if (!patient) {
       return NextResponse.json({ error: "Patient not found" }, { status: 404 });
+    }
+    return NextResponse.json({ success: true });
+  }
+
+  if (action === "start-screening") {
+    const sessionPatientId = await getSession();
+    if (!sessionPatientId) {
+      return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+    }
+    const patient = await getPatient(sessionPatientId);
+    if (patient && patient.screeningStatus === "due") {
+      await updatePatient(sessionPatientId, { screeningStatus: "awaiting-results" });
     }
     return NextResponse.json({ success: true });
   }

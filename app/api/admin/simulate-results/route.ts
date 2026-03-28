@@ -4,7 +4,7 @@ import { simulateResults } from "@/lib/patient-store";
 export async function POST(request: NextRequest) {
   const { patientId } = await request.json();
 
-  const patient = simulateResults(patientId);
+  const patient = await simulateResults(patientId);
   if (!patient) {
     return NextResponse.json({ error: "Patient not found" }, { status: 404 });
   }

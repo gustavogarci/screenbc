@@ -5,11 +5,11 @@ export async function POST(request: NextRequest) {
   const { patientId } = await request.json();
 
   if (patientId === "all") {
-    resetAll();
+    await resetAll();
     return NextResponse.json({ success: true, message: "All patients reset" });
   }
 
-  const patient = resetPatient(patientId);
+  const patient = await resetPatient(patientId);
   if (!patient) {
     return NextResponse.json({ error: "Patient not found" }, { status: 404 });
   }

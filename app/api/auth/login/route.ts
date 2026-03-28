@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
   }
 
   await createSession(patientId);
-  const patient = getPatient(patientId);
+  const patient = await getPatient(patientId);
 
   return NextResponse.json({
     patientId,

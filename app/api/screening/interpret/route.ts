@@ -1,7 +1,7 @@
 import { generateText } from "ai";
 import { openai } from "@ai-sdk/openai";
 import { getSession } from "@/lib/auth";
-import { getPatient, updatePatient } from "@/lib/patient-store";
+import { getPatient } from "@/lib/patient-store";
 import { getSummarySystemPrompt, buildSummaryUserMessage } from "@/lib/prompts";
 
 export async function POST() {
@@ -10,13 +10,9 @@ export async function POST() {
     return new Response("Not authenticated", { status: 401 });
   }
 
-  const patient = getPatient(patientId);
+  const patient = await getPatient(patientId);
   if (!patient || !patient.labResults) {
     return new Response("No results available", { status: 404 });
-  }
-
-  if (patient.cachedSummary) {
-    return Response.json({ summary: patient.cachedSummary });
   }
 
   if (!process.env.OPENAI_API_KEY) {
@@ -32,8 +28,6 @@ export async function POST() {
       system: getSummarySystemPrompt(),
       prompt: buildSummaryUserMessage(patient),
     });
-
-    updatePatient(patientId, { cachedSummary: text });
 
     return Response.json({ summary: text });
   } catch (error: unknown) {

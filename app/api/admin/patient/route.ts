@@ -7,7 +7,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: "Missing id" }, { status: 400 });
   }
 
-  const patient = getPatient(id);
+  const patient = await getPatient(id);
   if (!patient) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }

@@ -11,7 +11,7 @@ export default async function PortalPage() {
   const patientId = await getSession();
   if (!patientId) redirect("/login");
 
-  const patient = getPatient(patientId);
+  const patient = await getPatient(patientId);
   if (!patient) redirect("/login");
   if (!patient.consentAccepted) redirect("/consent");
 

@@ -10,7 +10,7 @@ export async function POST(request: Request) {
     return new Response("Not authenticated", { status: 401 });
   }
 
-  const patient = getPatient(patientId);
+  const patient = await getPatient(patientId);
   if (!patient) {
     return new Response("Patient not found", { status: 404 });
   }

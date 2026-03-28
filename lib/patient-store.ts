@@ -1,7 +1,6 @@
+import { cookies } from "next/headers";
 import type { Patient, LabResults, Questionnaire, FraminghamRisk } from "./types";
 import initialPatients from "@/data/demo-patients.json";
-import { readFileSync, writeFileSync, existsSync } from "fs";
-import { join } from "path";
 
 const LAB_RESULTS_BY_PATIENT: Record<string, { labResults: LabResults; framinghamRisk: FraminghamRisk; questionnaire: Questionnaire }> = {
   "PAT-001": {
@@ -57,84 +56,100 @@ const LAB_RESULTS_BY_PATIENT: Record<string, { labResults: LabResults; framingha
   },
 };
 
-const STORE_PATH = join(process.cwd(), ".screenbc-state.json");
+const COOKIE_PREFIX = "sbc-";
+const COOKIE_OPTIONS = {
+  httpOnly: true,
+  sameSite: "lax" as const,
+  path: "/",
+  maxAge: 60 * 60 * 24 * 7,
+};
 
-function loadStore(): Map<string, Patient> {
+type PatientOverrides = Omit<Partial<Patient>, "cachedSummary">;
+
+function getDefaults(): Map<string, Patient> {
   const map = new Map<string, Patient>();
-  if (existsSync(STORE_PATH)) {
-    try {
-      const data = JSON.parse(readFileSync(STORE_PATH, "utf-8")) as Patient[];
-      for (const p of data) {
-        map.set(p.id, p);
-      }
-      return map;
-    } catch {
-      // corrupted file, fall through to defaults
-    }
-  }
   for (const p of initialPatients as Patient[]) {
     map.set(p.id, { ...p });
   }
-  saveStore(map);
   return map;
 }
 
-function saveStore(map: Map<string, Patient>): void {
-  writeFileSync(STORE_PATH, JSON.stringify(Array.from(map.values()), null, 2));
+function getDefaultPatient(id: string): Patient | undefined {
+  return getDefaults().get(id);
 }
 
-export function getPatient(id: string): Patient | undefined {
-  return loadStore().get(id);
+function serializeOverrides(patient: Patient, base: Patient): string {
+  const diff: Record<string, unknown> = {};
+  for (const key of Object.keys(patient) as (keyof Patient)[]) {
+    if (key === "cachedSummary") continue;
+    if (JSON.stringify(patient[key]) !== JSON.stringify(base[key])) {
+      diff[key] = patient[key];
+    }
+  }
+  return encodeURIComponent(JSON.stringify(diff));
 }
 
-export function updatePatient(id: string, updates: Partial<Patient>): Patient | undefined {
-  const store = loadStore();
-  const patient = store.get(id);
-  if (!patient) return undefined;
-  const updated = { ...patient, ...updates };
-  store.set(id, updated);
-  saveStore(store);
+export async function getPatient(id: string): Promise<Patient | undefined> {
+  const base = getDefaultPatient(id);
+  if (!base) return undefined;
+
+  const cookieStore = await cookies();
+  const raw = cookieStore.get(`${COOKIE_PREFIX}${id}`)?.value;
+  if (!raw) return { ...base };
+
+  try {
+    const overrides: PatientOverrides = JSON.parse(decodeURIComponent(raw));
+    return { ...base, ...overrides };
+  } catch {
+    return { ...base };
+  }
+}
+
+export async function updatePatient(id: string, updates: Partial<Patient>): Promise<Patient | undefined> {
+  const current = await getPatient(id);
+  if (!current) return undefined;
+  const base = getDefaultPatient(id)!;
+
+  const updated = { ...current, ...updates };
+  const cookieStore = await cookies();
+  cookieStore.set(`${COOKIE_PREFIX}${id}`, serializeOverrides(updated, base), COOKIE_OPTIONS);
+
   return updated;
 }
 
-export function getAllPatients(): Patient[] {
-  return Array.from(loadStore().values());
+export async function getAllPatients(): Promise<Patient[]> {
+  const defaults = getDefaults();
+  const result: Patient[] = [];
+  for (const id of defaults.keys()) {
+    const patient = await getPatient(id);
+    if (patient) result.push(patient);
+  }
+  return result;
 }
 
-export function simulateResults(id: string): Patient | undefined {
-  const store = loadStore();
-  const patient = store.get(id);
+export async function simulateResults(id: string): Promise<Patient | undefined> {
+  const patient = await getPatient(id);
   if (!patient) return undefined;
   const preset = LAB_RESULTS_BY_PATIENT[id];
   if (!preset) return undefined;
 
-  const updated: Patient = {
-    ...patient,
+  return updatePatient(id, {
     screeningStatus: "results-ready",
     labResults: preset.labResults,
     framinghamRisk: patient.questionnaireCompleted ? preset.framinghamRisk : patient.framinghamRisk,
-    questionnaireCompleted: patient.questionnaireCompleted,
     questionnaire: patient.questionnaireCompleted ? preset.questionnaire : patient.questionnaire,
-  };
-  store.set(id, updated);
-  saveStore(store);
-  return updated;
+  });
 }
 
-export function resetPatient(id: string): Patient | undefined {
-  const store = loadStore();
-  const original = (initialPatients as Patient[]).find((p) => p.id === id);
-  if (!original) return undefined;
-  const reset = { ...original };
-  store.set(id, reset);
-  saveStore(store);
-  return reset;
+export async function resetPatient(id: string): Promise<Patient | undefined> {
+  const cookieStore = await cookies();
+  cookieStore.delete({ name: `${COOKIE_PREFIX}${id}`, path: "/" });
+  return getDefaultPatient(id);
 }
 
-export function resetAll(): void {
-  const map = new Map<string, Patient>();
-  for (const p of initialPatients as Patient[]) {
-    map.set(p.id, { ...p });
+export async function resetAll(): Promise<void> {
+  const cookieStore = await cookies();
+  for (const id of getDefaults().keys()) {
+    cookieStore.delete({ name: `${COOKIE_PREFIX}${id}`, path: "/" });
   }
-  saveStore(map);
 }
