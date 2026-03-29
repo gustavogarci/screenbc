@@ -68,6 +68,7 @@ interface PatientRow {
   postal_code: string;
   phn: string;
   email: string;
+  phone: string | null;
   has_family_doctor: boolean;
   consent_accepted: boolean;
   questionnaire_completed: boolean;
@@ -89,6 +90,7 @@ function rowToPatient(row: PatientRow): Patient {
     postalCode: row.postal_code,
     phn: row.phn,
     email: row.email,
+    phone: row.phone,
     hasFamilyDoctor: row.has_family_doctor,
     consentAccepted: row.consent_accepted,
     questionnaireCompleted: row.questionnaire_completed,
@@ -110,6 +112,7 @@ function patientUpdatesToRow(updates: Partial<Patient>): Record<string, unknown>
   if (updates.postalCode !== undefined) map.postal_code = updates.postalCode;
   if (updates.phn !== undefined) map.phn = updates.phn;
   if (updates.email !== undefined) map.email = updates.email;
+  if (updates.phone !== undefined) map.phone = updates.phone;
   if (updates.hasFamilyDoctor !== undefined) map.has_family_doctor = updates.hasFamilyDoctor;
   if (updates.consentAccepted !== undefined) map.consent_accepted = updates.consentAccepted;
   if (updates.questionnaireCompleted !== undefined) map.questionnaire_completed = updates.questionnaireCompleted;
@@ -132,6 +135,7 @@ function seedPatientToRow(p: Patient): PatientRow {
     postal_code: p.postalCode,
     phn: p.phn,
     email: p.email,
+    phone: p.phone,
     has_family_doctor: p.hasFamilyDoctor,
     consent_accepted: p.consentAccepted,
     questionnaire_completed: p.questionnaireCompleted,

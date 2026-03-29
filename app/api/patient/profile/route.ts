@@ -28,6 +28,33 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ success: true });
   }
 
+  if (action === "update-contact") {
+    const sessionPatientId = await getSession();
+    if (!sessionPatientId) {
+      return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+    }
+    const { email, phone } = body as { email?: string; phone?: string };
+    const updates: Record<string, unknown> = {};
+    if (typeof email === "string") {
+      const trimmed = email.trim();
+      if (!trimmed || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)) {
+        return NextResponse.json({ error: "Invalid email address" }, { status: 400 });
+      }
+      updates.email = trimmed;
+    }
+    if (typeof phone === "string") {
+      updates.phone = phone.trim() || null;
+    }
+    if (Object.keys(updates).length === 0) {
+      return NextResponse.json({ error: "No fields to update" }, { status: 400 });
+    }
+    const patient = await updatePatient(sessionPatientId, updates);
+    if (!patient) {
+      return NextResponse.json({ error: "Patient not found" }, { status: 404 });
+    }
+    return NextResponse.json({ success: true, patient });
+  }
+
   if (action === "start-screening") {
     const sessionPatientId = await getSession();
     if (!sessionPatientId) {

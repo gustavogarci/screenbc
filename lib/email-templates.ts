@@ -29,7 +29,7 @@ export function getScreeningDueEmail(patient: Patient): string {
       <p style="color:#474543;font-size:13px;line-height:1.5;margin:24px 0 0;">If you're not interested, no action is needed. This is a one-time notification.</p>
     </div>
     <div style="border-top:1px solid #D8D8D8;padding:20px 30px;">
-      <p style="color:#474543;font-size:12px;line-height:1.5;margin:0;">ScreenBC — Preventive Health Screening for British Columbians<br>A pilot program under Dr. Aisha Patel, MD</p>
+      <p style="color:#474543;font-size:12px;line-height:1.5;margin:0;">ScreenBC — Preventive Health Screening for British Columbians</p>
     </div>
   </div>
 </body>
@@ -54,7 +54,7 @@ export function getResultsReadyEmail(patient: Patient): string {
       <p style="color:#474543;font-size:13px;line-height:1.5;margin:24px 0 0;">If you have questions about your results after reviewing them, use the chat feature on your results page or call 8-1-1 (HealthLink BC).</p>
     </div>
     <div style="border-top:1px solid #D8D8D8;padding:20px 30px;">
-      <p style="color:#474543;font-size:12px;line-height:1.5;margin:0;">ScreenBC — Preventive Health Screening for British Columbians<br>A pilot program under Dr. Aisha Patel, MD</p>
+      <p style="color:#474543;font-size:12px;line-height:1.5;margin:0;">ScreenBC — Preventive Health Screening for British Columbians</p>
     </div>
   </div>
 </body>

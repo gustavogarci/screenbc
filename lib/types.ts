@@ -47,6 +47,7 @@ export interface Patient {
   postalCode: string;
   phn: string;
   email: string;
+  phone: string | null;
   hasFamilyDoctor: boolean;
   consentAccepted: boolean;
   questionnaireCompleted: boolean;

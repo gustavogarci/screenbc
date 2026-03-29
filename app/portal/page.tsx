@@ -3,8 +3,8 @@ import { getSession } from "@/lib/auth";
 import { getPatient } from "@/lib/patient-store";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
-import { Card, CardContent } from "@/components/ui/card";
 import { QuestionnaireBanner } from "@/components/screening/questionnaire-banner";
+import { ProfileCard } from "@/components/profile/profile-card";
 import { ScreeningStatus } from "@/components/screening/screening-status";
 
 export default async function PortalPage() {
@@ -14,13 +14,6 @@ export default async function PortalPage() {
   const patient = await getPatient(patientId);
   if (!patient) redirect("/login");
   if (!patient.consentAccepted) redirect("/consent");
-
-  const dob = new Date(patient.dateOfBirth);
-  const formattedDob = dob.toLocaleDateString("en-CA", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
 
   return (
     <>
@@ -57,45 +50,7 @@ export default async function PortalPage() {
 
             {/* Right column — profile card */}
             <div className="w-full md:w-80 md:flex-shrink-0 md:sticky md:top-6">
-              <Card className="border-surface-border shadow-sm py-0 gap-0">
-                <CardContent className="p-5">
-                  <h2 className="text-xs font-semibold text-text-secondary uppercase tracking-wide mb-4">
-                    Your Profile
-                  </h2>
-                  <dl className="space-y-2.5 text-sm">
-                    <div className="flex justify-between">
-                      <dt className="text-text-secondary">Name</dt>
-                      <dd className="font-medium text-text-primary">
-                        {patient.firstName} {patient.lastName}
-                      </dd>
-                    </div>
-                    <div className="flex justify-between">
-                      <dt className="text-text-secondary">Date of Birth</dt>
-                      <dd className="font-medium text-text-primary">
-                        {formattedDob} (Age {patient.age})
-                      </dd>
-                    </div>
-                    <div className="flex justify-between">
-                      <dt className="text-text-secondary">Sex</dt>
-                      <dd className="font-medium text-text-primary">
-                        {patient.sex === "F" ? "Female" : "Male"}
-                      </dd>
-                    </div>
-                    <div className="flex justify-between">
-                      <dt className="text-text-secondary">PHN</dt>
-                      <dd className="font-medium text-text-primary font-mono text-xs">
-                        {patient.phn}
-                      </dd>
-                    </div>
-                    <div className="flex justify-between">
-                      <dt className="text-text-secondary">Postal Code</dt>
-                      <dd className="font-medium text-text-primary">
-                        {patient.postalCode}
-                      </dd>
-                    </div>
-                  </dl>
-                </CardContent>
-              </Card>
+              <ProfileCard patient={patient} />
             </div>
           </div>
         </div>

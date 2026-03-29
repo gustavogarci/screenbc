@@ -85,9 +85,7 @@ export function RequisitionDoc({ patient, lifeLabsLocations }: Props) {
           <h2 className="font-bold text-xs uppercase tracking-wider mb-2">
             Ordering Clinician
           </h2>
-          <p>Dr. Aisha Patel, MD</p>
           <p>ScreenBC Preventive Screening Program</p>
-          <p>License #: 42891</p>
         </section>
 
         <section className="mb-6">

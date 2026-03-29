@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS patients (
   postal_code TEXT NOT NULL,
   phn TEXT NOT NULL,
   email TEXT NOT NULL,
+  phone TEXT DEFAULT NULL,
   has_family_doctor BOOLEAN NOT NULL DEFAULT FALSE,
   consent_accepted BOOLEAN NOT NULL DEFAULT FALSE,
   questionnaire_completed BOOLEAN NOT NULL DEFAULT FALSE,
@@ -23,9 +24,15 @@ CREATE TABLE IF NOT EXISTS patients (
 );
 
 -- Seed 3 demo patients
-INSERT INTO patients (id, first_name, last_name, date_of_birth, age, sex, postal_code, phn, email, has_family_doctor, consent_accepted, questionnaire_completed, questionnaire, screening_status, lab_results, framingham_risk, cached_summary)
+INSERT INTO patients (id, first_name, last_name, date_of_birth, age, sex, postal_code, phn, email, phone, has_family_doctor, consent_accepted, questionnaire_completed, questionnaire, screening_status, lab_results, framingham_risk, cached_summary)
 VALUES
-  ('PAT-001', 'Margaret', 'Johnson', '1971-01-20', 55, 'F', 'V8N 7P5', '8241 595 268', 'margaret.johnson.screenbc2026@gmail.com', FALSE, FALSE, FALSE, NULL, 'due', NULL, NULL, NULL),
-  ('PAT-002', 'Sarah', 'Chen', '1974-06-15', 52, 'F', 'V9A 1K3', '9172 483 651', 'sarah.chen.screenbc2026@gmail.com', FALSE, FALSE, FALSE, NULL, 'due', NULL, NULL, NULL),
-  ('PAT-003', 'Robert', 'Kim', '1963-03-08', 63, 'M', 'V2S 4N7', '7635 291 847', 'robert.kim.screenbc2026@gmail.com', FALSE, FALSE, FALSE, NULL, 'due', NULL, NULL, NULL)
+  ('PAT-001', 'Margaret', 'Johnson', '1971-01-20', 55, 'F', 'V8N 7P5', '8241 595 268', 'margaret.johnson.screenbc2026@gmail.com', '(250) 555-0171', FALSE, FALSE, FALSE, NULL, 'due', NULL, NULL, NULL),
+  ('PAT-002', 'Sarah', 'Chen', '1974-06-15', 52, 'F', 'V9A 1K3', '9172 483 651', 'sarah.chen.screenbc2026@gmail.com', '(250) 555-0342', FALSE, FALSE, FALSE, NULL, 'due', NULL, NULL, NULL),
+  ('PAT-003', 'Robert', 'Kim', '1963-03-08', 63, 'M', 'V2S 4N7', '7635 291 847', 'robert.kim.screenbc2026@gmail.com', '(604) 555-0589', FALSE, FALSE, FALSE, NULL, 'due', NULL, NULL, NULL)
 ON CONFLICT (id) DO NOTHING;
+
+-- Run this on an existing database to add the phone column:
+-- ALTER TABLE patients ADD COLUMN IF NOT EXISTS phone TEXT DEFAULT NULL;
+-- UPDATE patients SET phone = '(250) 555-0171' WHERE id = 'PAT-001';
+-- UPDATE patients SET phone = '(250) 555-0342' WHERE id = 'PAT-002';
+-- UPDATE patients SET phone = '(604) 555-0589' WHERE id = 'PAT-003';
