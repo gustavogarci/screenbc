@@ -1,5 +1,5 @@
 import { streamText, convertToModelMessages } from "ai";
-import { openai } from "@ai-sdk/openai";
+import { gateway } from "@ai-sdk/gateway";
 import { getSession } from "@/lib/auth";
 import { getPatient } from "@/lib/patient-store";
 import { getChatSystemPrompt } from "@/lib/prompts";
@@ -15,15 +15,11 @@ export async function POST(request: Request) {
     return new Response("Patient not found", { status: 404 });
   }
 
-  if (!process.env.OPENAI_API_KEY) {
-    return new Response("OPENAI_API_KEY is not configured", { status: 500 });
-  }
-
   const { messages } = await request.json();
 
   try {
     const result = streamText({
-      model: openai("gpt-4o"),
+      model: gateway("openai/gpt-4o"),
       system: getChatSystemPrompt(patient),
       messages: await convertToModelMessages(messages),
     });

@@ -1,5 +1,5 @@
-import { cookies } from "next/headers";
 import type { Patient, LabResults, Questionnaire, FraminghamRisk } from "./types";
+import { getSupabase } from "./supabase";
 import initialPatients from "@/data/demo-patients.json";
 
 const LAB_RESULTS_BY_PATIENT: Record<string, { labResults: LabResults; framinghamRisk: FraminghamRisk; questionnaire: Questionnaire }> = {
@@ -56,75 +56,129 @@ const LAB_RESULTS_BY_PATIENT: Record<string, { labResults: LabResults; framingha
   },
 };
 
-const COOKIE_PREFIX = "sbc-";
-const COOKIE_OPTIONS = {
-  httpOnly: true,
-  sameSite: "lax" as const,
-  path: "/",
-  maxAge: 60 * 60 * 24 * 7,
-};
+// --- snake_case <-> camelCase mapping ---
 
-type PatientOverrides = Omit<Partial<Patient>, "cachedSummary">;
+interface PatientRow {
+  id: string;
+  first_name: string;
+  last_name: string;
+  date_of_birth: string;
+  age: number;
+  sex: "M" | "F";
+  postal_code: string;
+  phn: string;
+  email: string;
+  has_family_doctor: boolean;
+  consent_accepted: boolean;
+  questionnaire_completed: boolean;
+  questionnaire: Questionnaire | null;
+  screening_status: string;
+  lab_results: LabResults | null;
+  framingham_risk: FraminghamRisk | null;
+  cached_summary: string | null;
+}
 
-function getDefaults(): Map<string, Patient> {
-  const map = new Map<string, Patient>();
-  for (const p of initialPatients as Patient[]) {
-    map.set(p.id, { ...p });
-  }
+function rowToPatient(row: PatientRow): Patient {
+  return {
+    id: row.id,
+    firstName: row.first_name,
+    lastName: row.last_name,
+    dateOfBirth: row.date_of_birth,
+    age: row.age,
+    sex: row.sex,
+    postalCode: row.postal_code,
+    phn: row.phn,
+    email: row.email,
+    hasFamilyDoctor: row.has_family_doctor,
+    consentAccepted: row.consent_accepted,
+    questionnaireCompleted: row.questionnaire_completed,
+    questionnaire: row.questionnaire,
+    screeningStatus: row.screening_status as Patient["screeningStatus"],
+    labResults: row.lab_results,
+    framinghamRisk: row.framingham_risk,
+    cachedSummary: row.cached_summary,
+  };
+}
+
+function patientUpdatesToRow(updates: Partial<Patient>): Record<string, unknown> {
+  const map: Record<string, unknown> = {};
+  if (updates.firstName !== undefined) map.first_name = updates.firstName;
+  if (updates.lastName !== undefined) map.last_name = updates.lastName;
+  if (updates.dateOfBirth !== undefined) map.date_of_birth = updates.dateOfBirth;
+  if (updates.age !== undefined) map.age = updates.age;
+  if (updates.sex !== undefined) map.sex = updates.sex;
+  if (updates.postalCode !== undefined) map.postal_code = updates.postalCode;
+  if (updates.phn !== undefined) map.phn = updates.phn;
+  if (updates.email !== undefined) map.email = updates.email;
+  if (updates.hasFamilyDoctor !== undefined) map.has_family_doctor = updates.hasFamilyDoctor;
+  if (updates.consentAccepted !== undefined) map.consent_accepted = updates.consentAccepted;
+  if (updates.questionnaireCompleted !== undefined) map.questionnaire_completed = updates.questionnaireCompleted;
+  if (updates.questionnaire !== undefined) map.questionnaire = updates.questionnaire;
+  if (updates.screeningStatus !== undefined) map.screening_status = updates.screeningStatus;
+  if (updates.labResults !== undefined) map.lab_results = updates.labResults;
+  if (updates.framinghamRisk !== undefined) map.framingham_risk = updates.framinghamRisk;
+  if (updates.cachedSummary !== undefined) map.cached_summary = updates.cachedSummary;
   return map;
 }
 
-function getDefaultPatient(id: string): Patient | undefined {
-  return getDefaults().get(id);
+function seedPatientToRow(p: Patient): PatientRow {
+  return {
+    id: p.id,
+    first_name: p.firstName,
+    last_name: p.lastName,
+    date_of_birth: p.dateOfBirth,
+    age: p.age,
+    sex: p.sex,
+    postal_code: p.postalCode,
+    phn: p.phn,
+    email: p.email,
+    has_family_doctor: p.hasFamilyDoctor,
+    consent_accepted: p.consentAccepted,
+    questionnaire_completed: p.questionnaireCompleted,
+    questionnaire: p.questionnaire,
+    screening_status: p.screeningStatus,
+    lab_results: p.labResults,
+    framingham_risk: p.framinghamRisk,
+    cached_summary: p.cachedSummary,
+  };
 }
 
-function serializeOverrides(patient: Patient, base: Patient): string {
-  const diff: Record<string, unknown> = {};
-  for (const key of Object.keys(patient) as (keyof Patient)[]) {
-    if (key === "cachedSummary") continue;
-    if (JSON.stringify(patient[key]) !== JSON.stringify(base[key])) {
-      diff[key] = patient[key];
-    }
-  }
-  return encodeURIComponent(JSON.stringify(diff));
-}
+// --- Public API (same signatures as before) ---
 
 export async function getPatient(id: string): Promise<Patient | undefined> {
-  const base = getDefaultPatient(id);
-  if (!base) return undefined;
+  const { data, error } = await getSupabase()
+    .from("patients")
+    .select("*")
+    .eq("id", id)
+    .single();
 
-  const cookieStore = await cookies();
-  const raw = cookieStore.get(`${COOKIE_PREFIX}${id}`)?.value;
-  if (!raw) return { ...base };
-
-  try {
-    const overrides: PatientOverrides = JSON.parse(decodeURIComponent(raw));
-    return { ...base, ...overrides };
-  } catch {
-    return { ...base };
-  }
+  if (error || !data) return undefined;
+  return rowToPatient(data as PatientRow);
 }
 
 export async function updatePatient(id: string, updates: Partial<Patient>): Promise<Patient | undefined> {
-  const current = await getPatient(id);
-  if (!current) return undefined;
-  const base = getDefaultPatient(id)!;
+  const row = patientUpdatesToRow(updates);
+  if (Object.keys(row).length === 0) return getPatient(id);
 
-  const updated = { ...current, ...updates };
-  const cookieStore = await cookies();
-  cookieStore.set(`${COOKIE_PREFIX}${id}`, serializeOverrides(updated, base), COOKIE_OPTIONS);
+  const { data, error } = await getSupabase()
+    .from("patients")
+    .update(row)
+    .eq("id", id)
+    .select("*")
+    .single();
 
-  return updated;
+  if (error || !data) return undefined;
+  return rowToPatient(data as PatientRow);
 }
 
 export async function getAllPatients(): Promise<Patient[]> {
-  const defaults = getDefaults();
-  const result: Patient[] = [];
-  for (const id of defaults.keys()) {
-    const patient = await getPatient(id);
-    if (patient) result.push(patient);
-  }
-  return result;
+  const { data, error } = await getSupabase()
+    .from("patients")
+    .select("*")
+    .order("id");
+
+  if (error || !data) return [];
+  return (data as PatientRow[]).map(rowToPatient);
 }
 
 export async function simulateResults(id: string): Promise<Patient | undefined> {
@@ -142,14 +196,25 @@ export async function simulateResults(id: string): Promise<Patient | undefined> 
 }
 
 export async function resetPatient(id: string): Promise<Patient | undefined> {
-  const cookieStore = await cookies();
-  cookieStore.delete({ name: `${COOKIE_PREFIX}${id}`, path: "/" });
-  return getDefaultPatient(id);
+  const seed = (initialPatients as Patient[]).find((p) => p.id === id);
+  if (!seed) return undefined;
+
+  const row = seedPatientToRow(seed);
+  const { data, error } = await getSupabase()
+    .from("patients")
+    .update(row)
+    .eq("id", id)
+    .select("*")
+    .single();
+
+  if (error || !data) return undefined;
+  return rowToPatient(data as PatientRow);
 }
 
 export async function resetAll(): Promise<void> {
-  const cookieStore = await cookies();
-  for (const id of getDefaults().keys()) {
-    cookieStore.delete({ name: `${COOKIE_PREFIX}${id}`, path: "/" });
+  const db = getSupabase();
+  for (const seed of initialPatients as Patient[]) {
+    const row = seedPatientToRow(seed);
+    await db.from("patients").update(row).eq("id", seed.id);
   }
 }
