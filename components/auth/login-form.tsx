@@ -6,14 +6,37 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 import { toast } from "sonner";
-import { KeyRound, Smartphone } from "lucide-react";
+import { KeyRound, Smartphone, UserRound } from "lucide-react";
 
 export function LoginForm() {
   const [mode, setMode] = useState<"select" | "credentials">("select");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [demoLoading, setDemoLoading] = useState(false);
   const [error, setError] = useState("");
+
+  async function handleDemoLogin() {
+    setDemoLoading(true);
+    setError("");
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username: "margaret.johnson", password: "demo1234" }),
+      });
+      if (!res.ok) {
+        setError("Unable to start demo. Please try again.");
+        setDemoLoading(false);
+        return;
+      }
+      const data = await res.json();
+      window.location.href = data.consentAccepted ? "/portal" : "/consent";
+    } catch {
+      setError("An error occurred. Please try again.");
+      setDemoLoading(false);
+    }
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -46,7 +69,7 @@ export function LoginForm() {
   }
 
   return (
-    <div className="flex-1 flex items-center justify-center px-4">
+    <div className="flex-1 py-8 flex items-center justify-center px-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <p className="text-sm text-text-secondary mb-1">Log in to:</p>
@@ -88,7 +111,23 @@ export function LoginForm() {
                 </span>
               </button>
 
-              <div className="pt-4 border-t border-surface-border">
+              <div className="pt-4 border-t border-surface-border space-y-3">
+                <button
+                  onClick={handleDemoLogin}
+                  disabled={demoLoading}
+                  className="w-full flex items-center gap-3 px-4 py-3.5 rounded-md border border-dashed border-bc-blue/40 hover:bg-bc-blue/5 transition-colors text-left"
+                >
+                  <UserRound className="h-5 w-5 text-bc-blue shrink-0" />
+                  <div>
+                    <span className="text-sm font-medium text-bc-blue">
+                      {demoLoading ? "Signing in..." : "Try as Sample Patient"}
+                    </span>
+                    <p className="text-xs text-text-secondary mt-0.5">
+                      Sign in as Margaret Johnson to explore the demo
+                    </p>
+                  </div>
+                </button>
+
                 <p className="text-xs text-text-secondary text-center">
                   No account?{" "}
                   <span className="text-bc-link">
