@@ -7,16 +7,26 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import type { Questionnaire, SmokingStatus } from "@/lib/types";
 
-export function QuestionnaireForm() {
+function boolToRadio(v: boolean | null | undefined): string {
+  return v === true ? "yes" : v === false ? "no" : "";
+}
+
+function smokingToRadio(v: SmokingStatus | null | undefined): string {
+  return v === "current" ? "yes" : v === "former" ? "former" : v === "never" ? "no" : "";
+}
+
+export function QuestionnaireForm({ questionnaire }: { questionnaire?: Questionnaire | null }) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const isEdit = !!questionnaire;
 
-  const [familyDiabetes, setFamilyDiabetes] = useState<string>("");
-  const [familyHeart, setFamilyHeart] = useState<string>("");
-  const [smoking, setSmoking] = useState<string>("");
-  const [systolicBp, setSystolicBp] = useState<string>("");
-  const [bpMedication, setBpMedication] = useState<string>("");
+  const [familyDiabetes, setFamilyDiabetes] = useState<string>(boolToRadio(questionnaire?.familyHistoryDiabetes));
+  const [familyHeart, setFamilyHeart] = useState<string>(boolToRadio(questionnaire?.familyHistoryHeartDisease));
+  const [smoking, setSmoking] = useState<string>(smokingToRadio(questionnaire?.smokingStatus));
+  const [systolicBp, setSystolicBp] = useState<string>(questionnaire?.systolicBp != null ? String(questionnaire.systolicBp) : "");
+  const [bpMedication, setBpMedication] = useState<string>(boolToRadio(questionnaire?.onBpMedication));
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -180,7 +190,7 @@ export function QuestionnaireForm() {
                 className="bg-bc-blue hover:bg-bc-blue-hover w-full sm:w-auto"
                 size="lg"
               >
-                {loading ? "Submitting..." : "Submit Questionnaire"}
+                {loading ? "Submitting..." : isEdit ? "Update Questionnaire" : "Submit Questionnaire"}
               </Button>
               <p className="text-xs text-text-secondary mt-3">
                 This information is used only to calculate your cardiovascular

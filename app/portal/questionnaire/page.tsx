@@ -17,7 +17,7 @@ export default async function QuestionnairePage() {
     <>
       <Header showLogout />
       <main className="flex-1">
-        <QuestionnaireForm />
+        <QuestionnaireForm questionnaire={patient.questionnaire} />
       </main>
       <Footer />
     </>
