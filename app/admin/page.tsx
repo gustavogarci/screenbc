@@ -92,6 +92,20 @@ export default function AdminPage() {
     });
   }
 
+  async function handleSendEmail(patientId: string, type: "due" | "results") {
+    const res = await fetch("/api/admin/send-email", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ patientId, type }),
+    });
+    const data = await res.json();
+    if (res.ok) {
+      toast.success(`Email sent to ${data.to}`);
+    } else {
+      toast.error(`Failed to send: ${data.error}`);
+    }
+  }
+
   function getPatientData(id: string) {
     return patients.find((p) => p.id === id);
   }
@@ -166,14 +180,20 @@ export default function AdminPage() {
                   )}
                 </div>
 
-                <div className="grid grid-cols-2 gap-2">
+                {patient?.email && (
+                  <p className="text-xs text-text-secondary mb-3">
+                    Email: {patient.email}
+                  </p>
+                )}
+
+                <div className="grid grid-cols-3 gap-2">
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={() => handleViewEmail(info.id, "due")}
                     className="text-xs"
                   >
-                    View &ldquo;Screening Due&rdquo; Email
+                    View &ldquo;Screening Due&rdquo;
                   </Button>
                   <Button
                     variant="outline"
@@ -181,14 +201,30 @@ export default function AdminPage() {
                     onClick={() => handleViewEmail(info.id, "results")}
                     className="text-xs"
                   >
-                    View &ldquo;Results Ready&rdquo; Email
+                    View &ldquo;Results Ready&rdquo;
                   </Button>
+                  <div />
+                  <Button
+                    size="sm"
+                    className="bg-bc-blue hover:bg-bc-blue-hover text-xs"
+                    onClick={() => handleSendEmail(info.id, "due")}
+                  >
+                    Send &ldquo;Screening Due&rdquo;
+                  </Button>
+                  <Button
+                    size="sm"
+                    className="bg-bc-blue hover:bg-bc-blue-hover text-xs"
+                    onClick={() => handleSendEmail(info.id, "results")}
+                  >
+                    Send &ldquo;Results Ready&rdquo;
+                  </Button>
+                  <div />
                   <Button
                     size="sm"
                     className="bg-bc-blue hover:bg-bc-blue-hover text-xs"
                     onClick={() => handleSimulate(info.id)}
                   >
-                    Simulate Lab Results Arriving
+                    Simulate Lab Results
                   </Button>
                   <Button
                     variant="outline"
