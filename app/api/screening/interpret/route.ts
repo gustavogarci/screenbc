@@ -1,4 +1,4 @@
-import { generateText } from "ai";
+import { streamText } from "ai";
 import { gateway } from "@ai-sdk/gateway";
 import { getSession } from "@/lib/auth";
 import { getPatient } from "@/lib/patient-store";
@@ -16,13 +16,13 @@ export async function POST() {
   }
 
   try {
-    const { text } = await generateText({
+    const result = streamText({
       model: gateway("openai/gpt-4o"),
       system: getSummarySystemPrompt(),
       prompt: buildSummaryUserMessage(patient),
     });
 
-    return Response.json({ summary: text });
+    return result.toTextStreamResponse();
   } catch (error: unknown) {
     const message =
       error instanceof Error ? error.message : "Unknown AI error";
