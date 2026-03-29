@@ -27,21 +27,37 @@ export function HealthSummary({ overallTier }: Props) {
     async function fetchSummary() {
       try {
         const res = await fetch("/api/screening/interpret", { method: "POST" });
-        const data = await res.json();
 
-        if (cancelled) return;
+        if (!res.ok) {
+          const data = await res.json().catch(() => ({}));
+          if (!cancelled) setError(data.error || `HTTP ${res.status}`);
+          if (!cancelled) setLoading(false);
+          return;
+        }
 
-        if (!res.ok || data.error) {
-          setError(data.error || `HTTP ${res.status}`);
-        } else {
-          setSummary(data.summary);
+        const reader = res.body?.getReader();
+        if (!reader) {
+          if (!cancelled) setError("No response stream");
+          if (!cancelled) setLoading(false);
+          return;
+        }
+
+        const decoder = new TextDecoder();
+        let text = "";
+
+        if (!cancelled) setLoading(false);
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done || cancelled) break;
+          text += decoder.decode(value, { stream: true });
+          setSummary(text);
         }
       } catch (err) {
         if (!cancelled) {
           setError(err instanceof Error ? err.message : "Network error");
+          setLoading(false);
         }
-      } finally {
-        if (!cancelled) setLoading(false);
       }
     }
 

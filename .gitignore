@@ -32,7 +32,6 @@ yarn-error.log*
 
 # env files
 .env*
-.env*.production
 
 # runtime state file
 .screenbc-state.json

@@ -58,16 +58,16 @@ export default async function ResultsPage() {
           </div>
 
           {/* Two-column layout */}
-          <div style={{ display: "flex", flexDirection: "row", gap: "1.5rem", alignItems: "flex-start" }}>
+          <div className="flex flex-col md:flex-row gap-6 items-start">
             {/* Left column — main content */}
-            <div className="space-y-8" style={{ flex: "1 1 0%", minWidth: 0 }}>
+            <div className="flex-1 min-w-0 space-y-8">
               <ResultsTable results={patient.labResults} />
               <HealthSummary overallTier={overallTier} />
               <FollowUpChat />
             </div>
 
             {/* Right column — sidebar cards */}
-            <div className="space-y-6" style={{ width: "320px", flexShrink: 0, position: "sticky", top: "1.5rem" }}>
+            <div className="w-full md:w-80 md:flex-shrink-0 md:sticky md:top-6 space-y-6">
               <FraminghamCard
                 framinghamRisk={patient.framinghamRisk}
                 patient={patient}

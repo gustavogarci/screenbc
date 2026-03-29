@@ -47,7 +47,7 @@ const TIER_STYLES = {
 export function ResultsTable({ results }: Props) {
   return (
     <div className="bg-white border border-surface-border rounded-md overflow-hidden">
-      <div className="hidden sm:grid grid-cols-[1fr_120px_130px_160px] gap-4 px-5 py-3 bg-muted text-xs font-semibold text-text-secondary uppercase tracking-wide border-b border-surface-border">
+      <div className="grid md:hidden lg:grid grid-cols-[1fr_120px_130px_160px] gap-4 px-5 py-3 bg-muted text-xs font-semibold text-text-secondary uppercase tracking-wide border-b border-surface-border">
         <span>Test</span>
         <span>Your Result</span>
         <span>Status</span>
@@ -68,7 +68,8 @@ export function ResultsTable({ results }: Props) {
           return (
             <AccordionItem key={key} value={key} className="border-0">
               <AccordionTrigger className="px-5 py-4 hover:no-underline hover:bg-muted/50">
-                <div className="grid grid-cols-1 sm:grid-cols-[1fr_120px_130px_160px] gap-2 sm:gap-4 items-center w-full text-left mr-2">
+                {/* Wide & narrow: 4-column row (below md, and lg+) */}
+                <div className="grid md:hidden lg:grid grid-cols-[1fr_120px_130px_160px] gap-4 items-center w-full text-left mr-2">
                   <span className="text-sm font-medium text-text-primary">
                     {name}
                   </span>
@@ -84,6 +85,26 @@ export function ResultsTable({ results }: Props) {
                     </Badge>
                   </span>
                   <span className="text-xs text-text-secondary">{reference}</span>
+                </div>
+                {/* Medium: compact 2-line layout (md to lg, when in narrow left column) */}
+                <div className="hidden md:block lg:hidden w-full text-left mr-2 space-y-1">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium text-text-primary">
+                      {name}
+                    </span>
+                    <Badge className={`${TIER_STYLES[result.tier]} text-xs font-medium`}>
+                      {result.tier === "yellow" && "\u26A0\uFE0F "}
+                      {result.tier === "green" && "\u2705 "}
+                      {result.tier === "red" && "\u26A0\uFE0F "}
+                      {tierLabel}
+                    </Badge>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-mono text-text-primary">
+                      {result.value} {result.unit}
+                    </span>
+                    <span className="text-xs text-text-secondary">{reference}</span>
+                  </div>
                 </div>
               </AccordionTrigger>
               <AccordionContent className="px-5 pb-4">
