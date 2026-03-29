@@ -12,7 +12,6 @@ const SUGGESTED_QUESTIONS = [
   "What foods should I avoid?",
   "Is my cholesterol dangerous?",
   "What does pre-diabetes mean?",
-  "Where can I see a doctor near me?",
 ];
 
 function getMessageText(message: { parts: Array<{ type: string; text?: string }> }): string {
@@ -23,7 +22,7 @@ function getMessageText(message: { parts: Array<{ type: string; text?: string }>
 }
 
 export function FollowUpChat() {
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(true);
   const [inputValue, setInputValue] = useState("");
   const { messages, sendMessage, status } = useChat({
     transport: new DefaultChatTransport({ api: "/api/chat" }),
