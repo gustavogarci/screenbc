@@ -5,6 +5,7 @@ import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { QuestionnaireBanner } from "@/components/screening/questionnaire-banner";
 import { ProfileCard } from "@/components/profile/profile-card";
+import { DemoToolsCard } from "@/components/demo/demo-tools-card";
 import { ScreeningStatus } from "@/components/screening/screening-status";
 
 export default async function PortalPage() {
@@ -49,8 +50,9 @@ export default async function PortalPage() {
             </div>
 
             {/* Right column — profile card */}
-            <div className="w-full md:w-80 md:flex-shrink-0 md:sticky md:top-6">
+            <div className="w-full md:w-80 md:flex-shrink-0 md:sticky md:top-6 space-y-4">
               <ProfileCard patient={patient} />
+              <DemoToolsCard patientId={patientId} screeningStatus={patient.screeningStatus} />
             </div>
           </div>
         </div>
