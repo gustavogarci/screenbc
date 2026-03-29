@@ -94,6 +94,12 @@ export function FraminghamCard({ framinghamRisk, patient }: Props) {
       <p className="text-sm text-text-primary mt-3 leading-relaxed">
         {explanations[framinghamRisk.category]}
       </p>
+      <Link
+        href="/portal/questionnaire"
+        className="text-xs text-bc-link hover:underline font-medium mt-3 inline-block"
+      >
+        Edit Answers
+      </Link>
     </div>
   );
 }
