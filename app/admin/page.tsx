@@ -121,12 +121,12 @@ export default function AdminPage() {
       </div>
       <div className="h-0.5 bg-bc-gold" />
 
-      <div className="max-w-3xl mx-auto px-4 py-10 space-y-8">
+      <div className="max-w-3xl mx-auto px-4 py-6 sm:py-10 space-y-6 sm:space-y-8">
         <Card className="border-surface-border shadow-sm">
-          <CardContent className="pt-6">
-            <div className="grid grid-cols-2 gap-3">
+          <CardContent className="pt-4">
+            <div className="flex flex-col sm:flex-row gap-3">
               <Button
-                className="bg-bc-blue hover:bg-bc-blue-hover"
+                className="flex-1 bg-bc-blue hover:bg-bc-blue-hover"
                 onClick={async () => {
                   await Promise.all(
                     PATIENTS.map((p) =>
@@ -144,6 +144,7 @@ export default function AdminPage() {
                 Simulate All Lab Results
               </Button>
               <Button
+                className="flex-1"
                 variant="destructive"
                 onClick={() => handleReset("all")}
               >
@@ -160,80 +161,79 @@ export default function AdminPage() {
           const patient = getPatientData(info.id);
           return (
             <Card key={info.id} className="border-surface-border shadow-sm">
-              <CardContent className="pt-6">
-                <div className="flex items-start justify-between mb-4">
-                  <div>
+              <CardContent className="pt-4">
+                <div className="mb-3">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
                     <h2 className="font-semibold text-text-primary">
                       {info.name}{" "}
                       <span className="text-xs text-text-secondary font-mono">
                         ({info.label})
                       </span>
                     </h2>
-                    <Badge className={`${TIER_COLORS[info.tier]} text-xs mt-1`}>
-                      {info.tier}
-                    </Badge>
+                    <div className="flex items-center gap-2">
+                      <Badge className={`${TIER_COLORS[info.tier]} text-xs`}>
+                        {info.tier}
+                      </Badge>
+                      {patient && (
+                        <Badge variant="outline" className="text-xs">
+                          {patient.screeningStatus}
+                        </Badge>
+                      )}
+                    </div>
                   </div>
-                  {patient && (
-                    <Badge variant="outline" className="text-xs">
-                      {patient.screeningStatus}
-                    </Badge>
+                  {patient?.email && (
+                    <span className="text-xs text-text-secondary mt-1 block">
+                      {patient.email}
+                    </span>
                   )}
                 </div>
 
-                {patient?.email && (
-                  <p className="text-xs text-text-secondary mb-3">
-                    Email: {patient.email}
-                  </p>
-                )}
-
-                <div className="grid grid-cols-3 gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleViewEmail(info.id, "due")}
-                    className="text-xs"
-                  >
-                    View &ldquo;Screening Due&rdquo;
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleViewEmail(info.id, "results")}
-                    className="text-xs"
-                  >
-                    View &ldquo;Results Ready&rdquo;
-                  </Button>
-                  <div />
-                  <Button
-                    size="sm"
-                    className="bg-bc-blue hover:bg-bc-blue-hover text-xs"
-                    onClick={() => handleSendEmail(info.id, "due")}
-                  >
-                    Send &ldquo;Screening Due&rdquo;
-                  </Button>
-                  <Button
-                    size="sm"
-                    className="bg-bc-blue hover:bg-bc-blue-hover text-xs"
-                    onClick={() => handleSendEmail(info.id, "results")}
-                  >
-                    Send &ldquo;Results Ready&rdquo;
-                  </Button>
-                  <div />
-                  <Button
-                    size="sm"
-                    className="bg-bc-blue hover:bg-bc-blue-hover text-xs"
-                    onClick={() => handleSimulate(info.id)}
-                  >
-                    Simulate Lab Results
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleReset(info.id)}
-                    className="text-xs"
-                  >
-                    Reset {info.name.split(" ")[0]} Only
-                  </Button>
+                <div className="space-y-2">
+                  <div className="flex flex-col sm:flex-row gap-2">
+                    <Button
+                      variant="outline"
+                      onClick={() => handleViewEmail(info.id, "due")}
+                      className="flex-1 text-sm sm:text-xs"
+                    >
+                      View Due Email
+                    </Button>
+                    <Button
+                      variant="outline"
+                      onClick={() => handleViewEmail(info.id, "results")}
+                      className="flex-1 text-sm sm:text-xs"
+                    >
+                      View Ready Email
+                    </Button>
+                  </div>
+                  <div className="flex flex-col sm:flex-row gap-2">
+                    <Button
+                      className="flex-1 bg-bc-blue hover:bg-bc-blue-hover text-sm sm:text-xs"
+                      onClick={() => handleSendEmail(info.id, "due")}
+                    >
+                      Send Due Email
+                    </Button>
+                    <Button
+                      className="flex-1 bg-bc-blue hover:bg-bc-blue-hover text-sm sm:text-xs"
+                      onClick={() => handleSendEmail(info.id, "results")}
+                    >
+                      Send Ready Email
+                    </Button>
+                  </div>
+                  <div className="flex flex-col sm:flex-row gap-2">
+                    <Button
+                      className="flex-1 bg-bc-blue hover:bg-bc-blue-hover text-sm sm:text-xs"
+                      onClick={() => handleSimulate(info.id)}
+                    >
+                      Simulate Lab Results
+                    </Button>
+                    <Button
+                      variant="destructive"
+                      onClick={() => handleReset(info.id)}
+                      className="flex-1 text-sm sm:text-xs"
+                    >
+                      Reset {info.name.split(" ")[0]} Only
+                    </Button>
+                  </div>
                 </div>
               </CardContent>
             </Card>
