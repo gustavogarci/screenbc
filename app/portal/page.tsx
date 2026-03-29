@@ -1,12 +1,24 @@
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/auth";
 import { getPatient } from "@/lib/patient-store";
+import type { Questionnaire } from "@/lib/types";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { QuestionnaireBanner } from "@/components/screening/questionnaire-banner";
 import { ProfileCard } from "@/components/profile/profile-card";
 import { DemoToolsCard } from "@/components/demo/demo-tools-card";
 import { ScreeningStatus } from "@/components/screening/screening-status";
+
+function questionnaireIsComplete(q: Questionnaire | null): boolean {
+  if (!q) return false;
+  return (
+    q.familyHistoryDiabetes !== null &&
+    q.familyHistoryHeartDisease !== null &&
+    q.smokingStatus !== null &&
+    q.systolicBp !== null &&
+    q.onBpMedication !== null
+  );
+}
 
 export default async function PortalPage() {
   const patientId = await getSession();
@@ -28,9 +40,12 @@ export default async function PortalPage() {
           <div className="flex flex-col md:flex-row gap-6 items-start">
             {/* Left column — status and banners */}
             <div className="flex-1 min-w-0 space-y-8">
-              {!patient.questionnaireCompleted && <QuestionnaireBanner />}
+              {!questionnaireIsComplete(patient.questionnaire) && (
+                <QuestionnaireBanner />
+              )}
 
               {patient.questionnaireCompleted &&
+                questionnaireIsComplete(patient.questionnaire) &&
                 patient.screeningStatus !== "results-ready" &&
                 patient.screeningStatus !== "up-to-date" && (
                   <div className="bg-status-green-bg border border-status-green/20 rounded-md p-4">

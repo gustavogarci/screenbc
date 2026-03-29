@@ -48,6 +48,7 @@ export async function POST(request: NextRequest) {
     questionnaire,
     questionnaireCompleted: true,
     framinghamRisk,
+    cachedSummary: null,
   });
 
   return NextResponse.json({ success: true });
