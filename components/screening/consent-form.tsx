@@ -37,7 +37,7 @@ export function ConsentForm({ patientId }: { patientId: string }) {
               </h2>
               <p>
                 ScreenBC is a preventive health screening pilot program for
-                British Columbians who do not currently have a family doctor. The
+                British Columbians. The
                 program screens for type 2 diabetes and high cholesterol
                 (dyslipidemia) through standard blood tests.
               </p>
@@ -62,15 +62,15 @@ export function ConsentForm({ patientId }: { patientId: string }) {
                   resources (e.g., UPCC, walk-in clinic, HealthLink BC).
                 </li>
                 <li>
-                  This program does <strong>NOT</strong> replace staying on the
-                  waitlist for a family doctor. It provides preventive screening
-                  only, with limited scope (diabetes and cholesterol).
-                </li>
-                <li>
                   You are responsible for following up on your results. ScreenBC
                   will provide you with resources, guidance, and referral
                   information, but cannot guarantee access to a physician for
                   follow-up care.
+                </li>
+                <li>
+                  This program does <strong>NOT</strong> replace staying on the
+                  waitlist for a family doctor. It provides preventive screening
+                  only, with limited scope (diabetes and cholesterol).
                 </li>
                 <li>
                   If you feel unwell at any time, call{" "}
