@@ -47,7 +47,7 @@ const TIER_STYLES = {
 export function ResultsTable({ results }: Props) {
   return (
     <div className="bg-white border border-surface-border rounded-md overflow-hidden">
-      <div className="grid md:hidden lg:grid grid-cols-[1fr_120px_130px_160px] gap-4 px-5 py-3 bg-muted text-xs font-semibold text-text-secondary uppercase tracking-wide border-b border-surface-border">
+      <div className="hidden lg:grid grid-cols-[1fr_120px_130px_160px] gap-4 px-5 py-3 bg-muted text-xs font-semibold text-text-secondary uppercase tracking-wide border-b border-surface-border">
         <span>Test</span>
         <span>Your Result</span>
         <span>Status</span>
@@ -69,7 +69,7 @@ export function ResultsTable({ results }: Props) {
             <AccordionItem key={key} value={key} className="border-0">
               <AccordionTrigger className="px-5 py-4 hover:no-underline hover:bg-muted/50">
                 {/* Wide & narrow: 4-column row (below md, and lg+) */}
-                <div className="grid md:hidden lg:grid grid-cols-[1fr_120px_130px_160px] gap-4 items-center w-full text-left mr-2">
+                <div className="hidden lg:grid grid-cols-[1fr_120px_130px_160px] gap-4 items-center w-full text-left mr-2">
                   <span className="text-sm font-medium text-text-primary">
                     {name}
                   </span>
@@ -87,7 +87,7 @@ export function ResultsTable({ results }: Props) {
                   <span className="text-xs text-text-secondary">{reference}</span>
                 </div>
                 {/* Medium: compact 2-line layout (md to lg, when in narrow left column) */}
-                <div className="hidden md:block lg:hidden w-full text-left mr-2 space-y-1">
+                <div className="block lg:hidden w-full text-left mr-2 space-y-1">
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-medium text-text-primary">
                       {name}

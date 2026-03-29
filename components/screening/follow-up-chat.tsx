@@ -41,7 +41,7 @@ export function FollowUpChat() {
     <div className="bg-white border border-surface-border rounded-md overflow-hidden">
       <button
         onClick={() => setExpanded(!expanded)}
-        className="w-full flex items-center justify-between px-6 py-4 hover:bg-muted/50 transition-colors"
+        className="w-full flex items-center justify-between px-4 sm:px-6 py-4 hover:bg-muted/50 transition-colors"
       >
         <h3 className="text-sm font-semibold text-text-primary">
           Have questions about your results?
@@ -54,7 +54,7 @@ export function FollowUpChat() {
       </button>
 
       {expanded && (
-        <div className="px-6 pb-5 border-t border-surface-border">
+        <div className="px-4 sm:px-6 pb-5 border-t border-surface-border">
           {messages.length === 0 && (
             <div className="flex flex-wrap gap-2 mt-4">
               {SUGGESTED_QUESTIONS.map((q) => (

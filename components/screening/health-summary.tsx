@@ -73,7 +73,7 @@ export function HealthSummary({ overallTier }: Props) {
     >
       <button
         onClick={() => setExpanded(!expanded)}
-        className="w-full flex items-center justify-between px-6 py-4 hover:bg-muted/50 transition-colors"
+        className="w-full flex items-center justify-between px-4 sm:px-6 py-4 hover:bg-muted/50 transition-colors"
       >
         <h3 className="text-xs font-semibold text-text-secondary uppercase tracking-wide">
           Your Personalized Health Summary
@@ -86,7 +86,7 @@ export function HealthSummary({ overallTier }: Props) {
       </button>
 
       {expanded && (
-        <div className="px-6 pb-5 border-t border-surface-border pt-4">
+        <div className="px-4 sm:px-6 pb-5 border-t border-surface-border pt-4">
           {loading && (
             <div className="space-y-3 animate-pulse">
               <div className="h-4 bg-muted rounded w-3/4" />
