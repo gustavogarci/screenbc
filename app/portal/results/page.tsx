@@ -60,7 +60,7 @@ export default async function ResultsPage() {
           {/* Two-column layout */}
           <div className="flex flex-col md:flex-row gap-6 items-start">
             {/* Left column — main content */}
-            <div className="flex-1 min-w-0 space-y-8">
+            <div className="flex-1 min-w-0 w-full space-y-8">
               <ResultsTable results={patient.labResults} />
               <HealthSummary overallTier={overallTier} />
               <FollowUpChat />
