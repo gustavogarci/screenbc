@@ -39,7 +39,7 @@ export default async function PortalPage() {
 
           <div className="flex flex-col md:flex-row gap-6 items-start">
             {/* Left column — status and banners */}
-            <div className="flex-1 min-w-0 space-y-8">
+            <div className="flex-1 min-w-0 w-full space-y-8">
               {!questionnaireIsComplete(patient.questionnaire) && (
                 <QuestionnaireBanner />
               )}
