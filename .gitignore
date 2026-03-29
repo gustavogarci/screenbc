@@ -31,7 +31,7 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # env files
-# .env* (committed for hackathon demo — delete API key after event)
+.env
 .env*.production
 
 # runtime state file
