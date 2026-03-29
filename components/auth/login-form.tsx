@@ -69,7 +69,7 @@ export function LoginForm() {
   }
 
   return (
-    <div className="py-8 flex items-center justify-center px-4">
+    <div className="flex-1 py-8 flex items-center justify-center px-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <p className="text-sm text-text-secondary mb-1">Log in to:</p>
