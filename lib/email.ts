@@ -11,7 +11,7 @@ function getResend() {
   return _resend;
 }
 
-const from = process.env.EMAIL_FROM ?? "ScreenBC <onboarding@resend.dev>";
+const from = process.env.EMAIL_FROM || "ScreenBC <onboarding@resend.dev>";
 
 export async function sendEmail({
   to,
