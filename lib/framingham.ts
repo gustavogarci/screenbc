@@ -48,8 +48,9 @@ export function calculateFraminghamRisk(inputs: FraminghamInputs): FraminghamRis
     inputs.sex === "M" ? MALE_COEFFICIENTS : FEMALE_COEFFICIENTS;
 
   const lnAge = Math.log(inputs.age);
-  const lnTotalChol = Math.log(inputs.totalCholesterol);
-  const lnHdl = Math.log(inputs.hdlCholesterol);
+  const MMOL_TO_MGDL = 38.67;
+  const lnTotalChol = Math.log(inputs.totalCholesterol * MMOL_TO_MGDL);
+  const lnHdl = Math.log(inputs.hdlCholesterol * MMOL_TO_MGDL);
   const lnSbp = Math.log(inputs.systolicBp);
 
   const sbpCoeff = inputs.onBpMedication
