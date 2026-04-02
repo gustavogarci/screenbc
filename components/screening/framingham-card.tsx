@@ -90,7 +90,9 @@ export function FraminghamCard({ framinghamRisk, patient }: Props) {
         {framinghamRisk.score}%{" "}
         <span className="text-base font-medium">({style.label})</span>
       </p>
-      <p className="text-xs text-text-secondary mt-2">Based on: {factors}</p>
+      <p className="text-xs text-text-secondary mt-2">
+        Based on: {factors}. Model: D&apos;Agostino General CVD (2008)
+      </p>
       <p className="text-sm text-text-primary mt-3 leading-relaxed">
         {explanations[framinghamRisk.category]}
       </p>
