@@ -28,7 +28,7 @@ export function HeroSection() {
   }
 
   return (
-    <div className="bg-white">
+    <div className="bg-surface">
       <div className="max-w-5xl mx-auto px-6 py-20 md:py-36">
         <div className="grid md:grid-cols-2 gap-10 md:gap-16 items-center">
           <div>

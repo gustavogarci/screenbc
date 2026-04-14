@@ -3,7 +3,7 @@ import { SectionWrapper } from "./section-wrapper";
 
 export function ProblemSection() {
   return (
-    <div className="bg-white">
+    <div className="bg-surface">
       <SectionWrapper id="the-problem">
         <h2 className="text-2xl font-semibold text-bc-blue mb-8">The Problem</h2>
 

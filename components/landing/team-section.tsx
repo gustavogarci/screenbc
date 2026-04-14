@@ -2,7 +2,7 @@ import { SectionWrapper } from "./section-wrapper";
 
 export function TeamSection() {
   return (
-    <div className="bg-white">
+    <div className="bg-surface">
       <SectionWrapper id="team">
         <h2 className="text-2xl font-semibold text-bc-blue mb-6">The Team</h2>
         <p className="text-text-secondary leading-relaxed">

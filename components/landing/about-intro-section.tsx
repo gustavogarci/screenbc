@@ -2,7 +2,7 @@ import { SectionWrapper } from "./section-wrapper";
 
 export function AboutIntroSection() {
   return (
-    <div className="bg-surface">
+    <div className="bg-white">
       <SectionWrapper id="about">
         <h2 className="text-2xl font-semibold text-bc-blue mb-3">
           About This Project
