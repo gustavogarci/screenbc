@@ -8,6 +8,7 @@ import { QuestionnaireBanner } from "@/components/screening/questionnaire-banner
 import { ProfileCard } from "@/components/profile/profile-card";
 import { DemoToolsCard } from "@/components/demo/demo-tools-card";
 import { ScreeningStatus } from "@/components/screening/screening-status";
+import { AwaitingResultsCountdown } from "@/components/screening/awaiting-results-countdown";
 
 function questionnaireIsComplete(q: Questionnaire | null): boolean {
   if (!q) return false;
@@ -60,7 +61,11 @@ export default async function PortalPage() {
                 <h2 className="text-xs font-semibold text-text-secondary uppercase tracking-wide mb-3">
                   Screening Status
                 </h2>
-                <ScreeningStatus status={patient.screeningStatus} />
+                {patient.screeningStatus === "awaiting-results" ? (
+                  <AwaitingResultsCountdown patientId={patientId} />
+                ) : (
+                  <ScreeningStatus status={patient.screeningStatus} />
+                )}
               </div>
             </div>
 

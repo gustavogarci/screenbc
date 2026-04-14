@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { validateCredentials, createSession } from "@/lib/auth";
-import { getPatient } from "@/lib/patient-store";
+import { resetPatient } from "@/lib/patient-store";
 
 export async function POST(request: NextRequest) {
   const { username, password } = await request.json();
@@ -13,8 +13,8 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  const patient = await resetPatient(patientId);
   await createSession(patientId);
-  const patient = await getPatient(patientId);
 
   return NextResponse.json({
     patientId,
