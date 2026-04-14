@@ -69,20 +69,16 @@ export function LoginForm() {
   }
 
   return (
-    <div className="flex-1 py-8 flex items-center justify-center px-4">
-      <div className="w-full max-w-md">
-        <div className="text-center mb-8">
-          <p className="text-sm text-text-secondary mb-1">Log in to:</p>
-          <h1 className="text-2xl font-semibold text-bc-blue">ScreenBC</h1>
-          <p className="text-sm text-text-secondary mt-3">
-            This service will receive your: name, email address, PHN
-          </p>
-        </div>
+    <div className="w-full max-w-md mx-auto">
+      <div>
+        <p className="text-sm text-text-secondary mb-2">
+          Log in to: <strong className="text-text-primary">ScreenBC</strong>
+        </p>
 
         {mode === "select" ? (
           <Card className="border-surface-border shadow-sm">
-            <CardContent className="pt-6 space-y-4">
-              <p className="text-sm font-medium text-text-secondary text-center mb-2">
+            <CardContent className="pt-4 space-y-3">
+              <p className="text-sm font-medium text-text-secondary">
                 Continue with:
               </p>
 
@@ -128,7 +124,7 @@ export function LoginForm() {
                   </div>
                 </button>
 
-                <p className="text-xs text-text-secondary text-center">
+                <p className="text-xs text-text-secondary">
                   No account?{" "}
                   <span className="text-bc-link">
                     Find out how to get the mobile app.
@@ -138,7 +134,7 @@ export function LoginForm() {
                     how to get a BC Token to use a username and password.
                   </span>
                 </p>
-                <p className="text-xs text-bc-link text-center mt-2 font-medium">
+                <p className="text-xs text-bc-link mt-2 font-medium">
                   Set up a BC Services Card account &rarr;
                 </p>
               </div>
@@ -198,6 +194,9 @@ export function LoginForm() {
             </CardContent>
           </Card>
         )}
+        <p className="text-xs text-text-secondary/60 text-center mt-3">
+          This service will receive your name, email address, and PHN.
+        </p>
       </div>
     </div>
   );
