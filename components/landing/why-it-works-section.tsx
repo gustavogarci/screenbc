@@ -31,7 +31,7 @@ export function WhyItWorksSection() {
 
         <div className="grid md:grid-cols-3 gap-6">
           {cards.map((card) => (
-            <Card key={card.title} className="border-surface-border bg-white">
+            <Card key={card.title} className="border-surface-border bg-surface">
               <CardContent className="pt-6">
                 <card.icon className="h-8 w-8 text-bc-blue mb-4" />
                 <h3 className="text-lg font-semibold text-text-primary mb-2">

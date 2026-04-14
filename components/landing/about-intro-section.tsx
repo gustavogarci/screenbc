@@ -2,8 +2,8 @@ import { SectionWrapper } from "./section-wrapper";
 
 export function AboutIntroSection() {
   return (
-    <div className="bg-white">
-      <SectionWrapper id="about">
+    <div id="about" className="bg-white scroll-mt-20">
+      <SectionWrapper>
         <h2 className="text-2xl font-semibold text-bc-blue mb-3">
           About This Project
         </h2>

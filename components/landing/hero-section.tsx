@@ -28,7 +28,7 @@ export function HeroSection() {
   }
 
   return (
-    <div className="bg-surface">
+    <div className="bg-surface min-h-[calc(100vh-58px)]">
       <div className="max-w-5xl mx-auto px-6 py-20 md:py-36">
         <div className="grid md:grid-cols-2 gap-10 md:gap-16 items-center">
           <div>
@@ -62,7 +62,7 @@ export function HeroSection() {
                 onClick={() => {
                   const el = document.getElementById("about");
                   if (el) {
-                    const y = el.getBoundingClientRect().top + window.scrollY - 80;
+                    const y = el.getBoundingClientRect().top + window.scrollY - 58;
                     window.scrollTo({ top: y, behavior: "smooth" });
                   }
                 }}
