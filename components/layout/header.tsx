@@ -13,7 +13,7 @@ export function Header({ showLogout = false }: { showLogout?: boolean }) {
   }
 
   return (
-    <header className="no-print">
+    <header className="no-print sticky top-0 z-50">
       <div className="bg-bc-blue">
         <div className="max-w-5xl mx-auto px-6 py-3 flex items-center justify-between">
           <Link href="/portal" className="flex items-center gap-2">
