@@ -67,7 +67,7 @@ export default async function ResultsPage() {
             </div>
 
             {/* Right column — sidebar cards */}
-            <div className="w-full md:w-80 md:flex-shrink-0 md:sticky md:top-6 space-y-6">
+            <div className="w-full md:w-80 md:flex-shrink-0 md:sticky md:top-20 space-y-6">
               <FraminghamCard
                 framinghamRisk={patient.framinghamRisk}
                 patient={patient}
