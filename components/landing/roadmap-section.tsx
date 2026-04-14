@@ -98,7 +98,7 @@ const phases = [
 
 export function RoadmapSection() {
   return (
-    <div className="bg-surface">
+    <div className="bg-white">
       <SectionWrapper id="roadmap">
         <h2 className="text-2xl font-semibold text-bc-blue mb-8">The Roadmap</h2>
 

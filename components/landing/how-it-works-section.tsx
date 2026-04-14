@@ -42,7 +42,7 @@ const steps = [
 
 export function HowItWorksSection() {
   return (
-    <div className="bg-white">
+    <div className="bg-surface">
       <SectionWrapper id="how-it-works">
         <h2 className="text-2xl font-semibold text-bc-blue mb-10">How It Works</h2>
 

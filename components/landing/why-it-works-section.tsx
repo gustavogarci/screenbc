@@ -25,7 +25,7 @@ export function WhyItWorksSection() {
   ];
 
   return (
-    <div className="bg-surface">
+    <div className="bg-white">
       <SectionWrapper id="why-it-works">
         <h2 className="text-2xl font-semibold text-bc-blue mb-8">Why It Works</h2>
 

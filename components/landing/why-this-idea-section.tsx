@@ -30,7 +30,7 @@ const reasons = [
 
 export function WhyThisIdeaSection() {
   return (
-    <div className="bg-white">
+    <div className="bg-surface">
       <SectionWrapper id="why-this-idea">
         <h2 className="text-2xl font-semibold text-bc-blue mb-3">
           Why This Idea

@@ -2,7 +2,7 @@ import { SectionWrapper } from "./section-wrapper";
 
 export function InsightSection() {
   return (
-    <div className="bg-surface">
+    <div className="bg-white">
       <SectionWrapper id="the-insight">
         <h2 className="text-2xl font-semibold text-bc-blue mb-8">The Insight</h2>
 
